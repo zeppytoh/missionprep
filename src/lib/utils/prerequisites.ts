@@ -4,7 +4,7 @@ import type { ModuleStatus } from '$lib/types/content';
  * Module with prerequisite information
  */
 export interface ModuleWithPrerequisites {
-	id: string;
+	id: number;
 	slug: string;
 	prerequisites: string[]; // Array of prerequisite module slugs
 }
@@ -13,7 +13,7 @@ export interface ModuleWithPrerequisites {
  * User progress record for a module
  */
 export interface UserProgressRecord {
-	moduleId: string;
+	moduleId: number;
 	status: ModuleStatus;
 }
 
@@ -51,7 +51,7 @@ export function canAccessModule(
 			const prereqModule = allModules.find((m) => m.slug === slug);
 			return prereqModule?.id;
 		})
-		.filter((id): id is string => id !== undefined);
+		.filter((id): id is number => id !== undefined);
 
 	// Check if all prerequisites are completed
 	return prerequisiteIds.every((prereqId) => {

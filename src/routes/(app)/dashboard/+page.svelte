@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import * as Card from '$lib/components/ui/card';
+	import { Progress } from '$lib/components/ui/progress';
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -10,17 +12,25 @@
 
 	<!-- Placeholder sections for Phase 2 -->
 	<div class="mt-8 space-y-4">
-		<div class="rounded-xl border border-slate-200 bg-white p-5">
-			<h2 class="text-sm font-semibold text-slate-700">Overall Progress</h2>
-			<div class="mt-3 h-2 w-full rounded-full bg-slate-100">
-				<div class="h-2 rounded-full bg-blue-600" style="width: 0%"></div>
-			</div>
-			<p class="mt-2 text-xs text-slate-400">0 of 10 modules completed</p>
-		</div>
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-sm font-semibold">Overall Progress</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<Progress value={0} class="mt-3" />
+				<p class="mt-2 text-xs text-muted-foreground">0 of 10 modules completed</p>
+			</Card.Content>
+		</Card.Root>
 
-		<div class="rounded-xl border border-slate-200 bg-white p-5">
-			<h2 class="text-sm font-semibold text-slate-700">Next Step</h2>
-			<p class="mt-1 text-sm text-slate-500">Complete Module 1: Welcome & Orientation to get started.</p>
-		</div>
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-sm font-semibold">Next Step</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<p class="text-sm text-muted-foreground">
+					Complete Module 1: Welcome & Orientation to get started.
+				</p>
+			</Card.Content>
+		</Card.Root>
 	</div>
 </div>

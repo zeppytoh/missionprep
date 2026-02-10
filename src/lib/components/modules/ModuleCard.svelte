@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { Card, Badge, ProgressBar } from '$lib/components/ui';
+	import * as Card from '$lib/components/ui/card';
+	import { Badge } from '$lib/components/ui/badge';
+	import { Progress } from '$lib/components/ui/progress';
 	import { CheckCircle2, Lock, Clock } from 'lucide-svelte';
 	import type { ModuleStatus } from '$lib/types/content';
 
@@ -36,8 +38,8 @@
 	const isNotStarted = $derived(status === 'not_started');
 
 	const tierColors = {
-		1: 'info',
-		2: 'warning'
+		1: 'default',
+		2: 'secondary'
 	} as const;
 
 	const tierLabels = {
@@ -54,8 +56,7 @@
 	}
 </script>
 
-<Card
-	padding="none"
+<Card.Root
 	class="transition-all hover:shadow-md {isLocked ? 'opacity-60' : ''} {isCompleted
 		? 'border-green-500 border-2'
 		: ''}"
@@ -65,7 +66,7 @@
 		class="block {isLocked ? 'pointer-events-none' : ''}"
 		tabindex={isLocked ? -1 : 0}
 	>
-		<div class="p-4">
+		<Card.Content class="p-4">
 			<!-- Header -->
 			<div class="flex items-start justify-between gap-3 mb-2">
 				<div class="flex-1">
@@ -126,7 +127,7 @@
 							<span class="text-blue-700 font-medium">In Progress</span>
 							<span class="text-gray-600">Page {progress.currentPage + 1} of 7</span>
 						</div>
-						<ProgressBar value={progress.currentPage + 1} max={7} variant="default" size="sm" />
+						<Progress value={(progress.currentPage + 1) / 7 * 100} class="h-2" />
 					</div>
 				{:else}
 					<!-- Not Started state -->
@@ -136,6 +137,6 @@
 					</div>
 				{/if}
 			</div>
-		</div>
+		</Card.Content>
 	</a>
-</Card>
+</Card.Root>

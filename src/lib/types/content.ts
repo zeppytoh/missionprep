@@ -21,10 +21,10 @@ export interface VideoBlock extends BaseBlock {
 	duration?: number; // seconds
 }
 
-// Info box - highlighted callout
+// Info box - highlighted callout with variants
 export interface InfoBoxBlock extends BaseBlock {
 	type: 'info-box';
-	heading?: string;
+	variant: 'welcome' | 'outcomes' | 'note' | 'warning';
 	content: string;
 }
 
@@ -39,43 +39,38 @@ export interface KeyPointBlock extends BaseBlock {
 export interface ActivityBlock extends BaseBlock {
 	type: 'activity';
 	title: string;
-	setup?: string;
-	investigation?: string;
-	discovery?: string; // debrief
+	sections: {
+		setup?: string;
+		investigation?: string;
+		discovery?: string;
+		application?: string;
+	};
 }
 
 // Case study - scenario card
 export interface CaseStudyBlock extends BaseBlock {
 	type: 'case-study';
 	title: string;
-	situation: string;
-	diagnosis: string;
-	solution: string;
+	scenario: string;
+	questions?: string[];
 }
 
-// Quiz question
-export interface QuizQuestion {
-	id: string;
+// Quiz inline block - small quiz within content
+export interface QuizInlineBlock extends BaseBlock {
+	type: 'quiz-inline';
 	question: string;
-	options: Array<{ id: string; text: string }>;
-	correct: string; // option id
-	explanation: string;
-}
-
-// Quiz block - inline quiz (can appear at end of any page)
-export interface QuizBlock extends BaseBlock {
-	type: 'quiz';
-	questions: QuizQuestion[];
-	passingScore: number; // percentage (0-100)
-	isCompletionQuiz: boolean; // true = required for module completion, false = optional learning check
+	options: string[];
+	correctIndex: number;
+	explanation?: string;
 }
 
 // Reflection block - personal notes
 export interface ReflectionBlock extends BaseBlock {
 	type: 'reflection';
 	id: string; // unique identifier for this reflection
-	question: string;
-	initialValue?: string; // pre-filled text if any
+	prompt: string;
+	required: boolean;
+	minLength?: number;
 }
 
 // Embed block - external iframe
@@ -94,7 +89,7 @@ export type ContentBlock =
 	| KeyPointBlock
 	| ActivityBlock
 	| CaseStudyBlock
-	| QuizBlock
+	| QuizInlineBlock
 	| ReflectionBlock
 	| EmbedBlock;
 
@@ -112,6 +107,33 @@ export interface ModulePage {
 	blocks: ContentBlock[];
 }
 
+// Quiz configuration (separate from inline quiz blocks)
+export interface QuizQuestion {
+	id: string;
+	question: string;
+	options: string[];
+	correctIndex: number;
+	explanation?: string;
+}
+
+export interface QuizConfig {
+	questions: QuizQuestion[];
+	passingScore: number; // percentage
+	allowRetake: boolean;
+}
+
+// Reflection configuration (separate from inline reflection blocks)
+export interface ReflectionPrompt {
+	id: string;
+	prompt: string;
+	required: boolean;
+	minLength?: number;
+}
+
+export interface ReflectionConfig {
+	prompts: ReflectionPrompt[];
+}
+
 // Module metadata (from frontmatter)
 export interface ModuleMetadata {
 	slug: string;
@@ -120,12 +142,15 @@ export interface ModuleMetadata {
 	order: number;
 	estimatedMinutes: number;
 	prerequisites: string[]; // slugs of prerequisite modules
+	description?: string;
 }
 
 // Full parsed module
 export interface ParsedModule {
 	metadata: ModuleMetadata;
 	pages: ModulePage[];
+	quiz?: QuizConfig;
+	reflections?: ReflectionConfig;
 }
 
 // Module status in database

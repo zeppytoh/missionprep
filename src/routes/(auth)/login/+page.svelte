@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client';
 	import { goto } from '$app/navigation';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
 
 	let email = $state('');
 	let password = $state('');
@@ -31,37 +34,31 @@
 				<div class="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</div>
 			{/if}
 
-			<div>
-				<label for="email" class="mb-1 block text-sm font-medium text-slate-700">Email</label>
-				<input
+			<div class="space-y-2">
+				<Label for="email">Email</Label>
+				<Input
 					id="email"
 					type="email"
 					bind:value={email}
 					required
-					class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 					placeholder="you@example.com"
 				/>
 			</div>
 
-			<div>
-				<label for="password" class="mb-1 block text-sm font-medium text-slate-700">Password</label>
-				<input
+			<div class="space-y-2">
+				<Label for="password">Password</Label>
+				<Input
 					id="password"
 					type="password"
 					bind:value={password}
 					required
-					class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
 					placeholder="••••••••"
 				/>
 			</div>
 
-			<button
-				type="submit"
-				disabled={loading}
-				class="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-			>
+			<Button type="submit" disabled={loading} class="w-full">
 				{loading ? 'Signing in...' : 'Sign in'}
-			</button>
+			</Button>
 		</form>
 
 		<p class="mt-6 text-center text-sm text-slate-500">
