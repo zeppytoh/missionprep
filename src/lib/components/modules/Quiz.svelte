@@ -95,7 +95,9 @@
 					<span class="flex-shrink-0 w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
 						{qIndex + 1}
 					</span>
-					<h4 class="flex-1 text-gray-900 font-medium">{question.question}</h4>
+					<div class="flex-1 text-gray-900 font-medium prose prose-sm max-w-none">
+						{@html question.question}
+					</div>
 				</div>
 
 				<!-- Options -->
@@ -123,11 +125,13 @@
 
 							<div class="flex-1">
 								<div class="flex items-center gap-2">
-									<span class="text-gray-900">{option.text}</span>
+									<div class="text-gray-900 prose prose-sm max-w-none [&>p]:inline [&>p]:m-0">
+										{@html option.text}
+									</div>
 									{#if showFeedback && isCorrect}
-										<CheckCircle2 class="w-5 h-5 text-green-600" />
+										<CheckCircle2 class="w-5 h-5 text-green-600 flex-shrink-0" />
 									{:else if showFeedback && isSelected && !isCorrect}
-										<XCircle class="w-5 h-5 text-red-600" />
+										<XCircle class="w-5 h-5 text-red-600 flex-shrink-0" />
 									{/if}
 								</div>
 							</div>
@@ -138,10 +142,10 @@
 				<!-- Explanation (shown after submission) -->
 				{#if submitted}
 					<div class="mt-3 ml-9 p-3 bg-blue-50 border border-blue-100 rounded-lg">
-						<p class="text-sm text-blue-900">
+						<div class="text-sm text-blue-900 prose prose-sm max-w-none">
 							<strong>Explanation:</strong>
-							{question.explanation}
-						</p>
+							{@html question.explanation}
+						</div>
 					</div>
 				{/if}
 			</div>

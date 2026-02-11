@@ -14,9 +14,18 @@
 	let { reflection, moduleId, initialValue = '' }: Props = $props();
 
 	// State
-	let value = $state(initialValue || reflection.initialValue || '');
+	let value = $state('');
 	let lastSaved = $state<Date | null>(null);
 	let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	// Sync props to state on mount and prop changes
+	$effect(() => {
+		const newValue = initialValue || reflection.initialValue || '';
+		// Only update if value is empty (avoid overwriting user edits)
+		if (value === '') {
+			value = newValue;
+		}
+	});
 
 	// Derived
 	const characterCount = $derived(value.length);
@@ -96,7 +105,9 @@
 	<Card.Content class="space-y-3">
 		<!-- Question -->
 		<div class="bg-white p-4 rounded-lg border border-purple-100">
-			<p class="text-gray-900 font-medium">{reflection.question}</p>
+			<div class="text-gray-900 font-medium prose prose-sm max-w-none">
+				{@html reflection.question}
+			</div>
 		</div>
 
 		<!-- Textarea -->

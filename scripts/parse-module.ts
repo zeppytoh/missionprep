@@ -1,10 +1,70 @@
 import matter from 'gray-matter';
+import { marked } from 'marked';
 import type {
 	ParsedModule,
 	ModulePage,
 	ContentBlock,
 	QuizQuestion
 } from '../src/lib/types/content';
+
+// Configure marked for safe HTML output
+marked.setOptions({
+	gfm: true, // GitHub Flavored Markdown
+	breaks: true // Convert line breaks to <br>
+});
+
+/**
+ * Convert markdown to HTML
+ */
+function markdownToHtml(markdown: string): string {
+	if (!markdown || markdown.trim() === '') return '';
+	return marked.parse(markdown) as string;
+}
+
+/**
+ * Convert YouTube URL to embed format
+ * Supports:
+ * - https://www.youtube.com/watch?v=VIDEO_ID
+ * - https://youtu.be/VIDEO_ID
+ * - https://www.youtube.com/embed/VIDEO_ID (already embed format)
+ * - http://www.youtube.com/... (http versions)
+ */
+function convertToYouTubeEmbed(url: string): string {
+	if (!url) return url;
+
+	// Already an embed URL
+	if (url.includes('youtube.com/embed/') || url.includes('youtube-nocookie.com/embed/')) {
+		return url;
+	}
+
+	// Extract video ID from various formats
+	let videoId: string | null = null;
+
+	// Format: https://www.youtube.com/watch?v=VIDEO_ID or youtube.com/watch?v=VIDEO_ID
+	const watchMatch = url.match(/[?&]v=([^&&#]+)/);
+	if (watchMatch) {
+		videoId = watchMatch[1];
+	}
+
+	// Format: https://youtu.be/VIDEO_ID
+	if (!videoId) {
+		const shortMatch = url.match(/youtu\.be\/([^?&#]+)/);
+		if (shortMatch) {
+			videoId = shortMatch[1];
+		}
+	}
+
+	// If we found a video ID, convert to embed format
+	if (videoId) {
+		// Clean video ID (remove any trailing parameters)
+		videoId = videoId.split(/[?&#]/)[0];
+		console.log(`  → Converting YouTube URL to embed: ${videoId}`);
+		return `https://www.youtube.com/embed/${videoId}`;
+	}
+
+	// Return original URL if not a YouTube link
+	return url;
+}
 
 /**
  * Parse a module markdown file into structured JSONB data
@@ -115,7 +175,7 @@ function parseBlocks(content: string): ContentBlock[] {
 			if (textContent.trim()) {
 				blocks.push({
 					type: 'text',
-					body: textContent.trim()
+					body: markdownToHtml(textContent.trim())
 				});
 			}
 			continue;
@@ -163,7 +223,7 @@ function parseDirectiveBlock(
 				block: {
 					type: 'text',
 					heading: attrs.heading,
-					body: blockContent
+					body: markdownToHtml(blockContent)
 				},
 				endIndex
 			};
@@ -172,7 +232,7 @@ function parseDirectiveBlock(
 			return {
 				block: {
 					type: 'video',
-					url: attrs.url || '',
+					url: convertToYouTubeEmbed(attrs.url || ''),
 					title: attrs.title,
 					duration: attrs.duration ? parseInt(attrs.duration) : undefined
 				},
@@ -184,7 +244,7 @@ function parseDirectiveBlock(
 				block: {
 					type: 'info-box',
 					heading: attrs.heading,
-					content: blockContent
+					content: markdownToHtml(blockContent)
 				},
 				endIndex
 			};
@@ -194,7 +254,7 @@ function parseDirectiveBlock(
 				block: {
 					type: 'key-point',
 					heading: attrs.heading,
-					content: blockContent
+					content: markdownToHtml(blockContent)
 				},
 				endIndex
 			};
@@ -235,7 +295,7 @@ function parseDirectiveBlock(
 				block: {
 					type: 'reflection',
 					id: attrs.id || `r${Date.now()}`,
-					question: blockContent,
+					question: markdownToHtml(blockContent),
 					initialValue: attrs.initialValue
 				},
 				endIndex
@@ -257,7 +317,7 @@ function parseDirectiveBlock(
 			return {
 				block: {
 					type: 'text',
-					body: blockContent
+					body: markdownToHtml(blockContent)
 				},
 				endIndex
 			};
@@ -301,13 +361,13 @@ function parseActivityContent(content: string): {
 	);
 	const discoveryMatch = content.match(/\*\*Discovery:\*\*([\s\S]*)/);
 
-	if (setupMatch) sections.setup = setupMatch[1].trim();
-	if (investigationMatch) sections.investigation = investigationMatch[1].trim();
-	if (discoveryMatch) sections.discovery = discoveryMatch[1].trim();
+	if (setupMatch) sections.setup = markdownToHtml(setupMatch[1].trim());
+	if (investigationMatch) sections.investigation = markdownToHtml(investigationMatch[1].trim());
+	if (discoveryMatch) sections.discovery = markdownToHtml(discoveryMatch[1].trim());
 
 	// Fallback: if no sections found, treat entire content as setup
 	if (!sections.setup && !sections.investigation && !sections.discovery) {
-		sections.setup = content;
+		sections.setup = markdownToHtml(content);
 	}
 
 	return sections;
@@ -326,9 +386,9 @@ function parseCaseStudyContent(content: string): {
 	const solutionMatch = content.match(/\*\*Solution:\*\*([\s\S]*)/);
 
 	return {
-		situation: situationMatch ? situationMatch[1].trim() : '',
-		diagnosis: diagnosisMatch ? diagnosisMatch[1].trim() : '',
-		solution: solutionMatch ? solutionMatch[1].trim() : ''
+		situation: situationMatch ? markdownToHtml(situationMatch[1].trim()) : '',
+		diagnosis: diagnosisMatch ? markdownToHtml(diagnosisMatch[1].trim()) : '',
+		solution: solutionMatch ? markdownToHtml(solutionMatch[1].trim()) : ''
 	};
 }
 
@@ -385,10 +445,13 @@ function parseQuizQuestions(content: string): QuizQuestion[] {
 		if (questionText && options.length > 0 && correct) {
 			questions.push({
 				id: `q${questions.length + 1}`,
-				question: questionText,
-				options,
+				question: markdownToHtml(questionText),
+				options: options.map(opt => ({
+					id: opt.id,
+					text: markdownToHtml(opt.text)
+				})),
 				correct,
-				explanation: explanation || 'Check the lesson content for more details.'
+				explanation: markdownToHtml(explanation || 'Check the lesson content for more details.')
 			});
 		}
 	}

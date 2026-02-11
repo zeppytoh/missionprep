@@ -11,11 +11,20 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Cast pages to proper type
-	const pages = (data.module.pages as unknown as ModulePage[]) || [];
+	// Cast pages to proper type (derived from prop)
+	const pages = $derived((data.module.pages as unknown as ModulePage[]) || []);
 
 	// Current page state (0-indexed, 0-6 for pages 1-7)
-	let currentPageIndex = $state(data.progress?.currentPage || 0);
+	let currentPageIndex = $state(0);
+	let pageInitialized = false;
+
+	// Initialize from data.progress on mount
+	$effect(() => {
+		if (!pageInitialized) {
+			currentPageIndex = data.progress?.currentPage || 0;
+			pageInitialized = true;
+		}
+	});
 
 	// Derived values
 	const currentPage = $derived(pages[currentPageIndex]);

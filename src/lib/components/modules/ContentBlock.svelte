@@ -48,9 +48,11 @@
 				<iframe
 					src={block.url}
 					title={block.title || 'Video'}
-					class="w-full h-full"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					class="w-full h-full border-0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 					allowfullscreen
+					referrerpolicy="strict-origin-when-cross-origin"
+					loading="lazy"
 				></iframe>
 			</div>
 		</div>
@@ -63,7 +65,7 @@
 						{#if block.heading}
 							<h4 class="font-semibold text-blue-900 mb-2">{block.heading}</h4>
 						{/if}
-						<div class="text-sm text-blue-800 prose prose-blue prose-sm">
+						<div class="text-sm text-blue-800 prose prose-blue prose-sm max-w-none">
 							{@html block.content}
 						</div>
 					</div>
@@ -79,7 +81,7 @@
 						{#if block.heading}
 							<h4 class="font-semibold text-amber-900 mb-2">{block.heading}</h4>
 						{/if}
-						<div class="text-sm text-amber-800 prose prose-amber prose-sm">
+						<div class="text-sm text-amber-800 prose prose-amber prose-sm max-w-none">
 							{@html block.content}
 						</div>
 					</div>
@@ -98,7 +100,7 @@
 				{#if block.setup}
 					<div>
 						<h4 class="font-semibold text-purple-900 mb-1">Setup</h4>
-						<div class="text-sm text-purple-800 prose prose-purple prose-sm">
+						<div class="text-sm text-purple-800 prose prose-purple prose-sm max-w-none">
 							{@html block.setup}
 						</div>
 					</div>
@@ -106,7 +108,7 @@
 				{#if block.investigation}
 					<div>
 						<h4 class="font-semibold text-purple-900 mb-1">Investigation</h4>
-						<div class="text-sm text-purple-800 prose prose-purple prose-sm">
+						<div class="text-sm text-purple-800 prose prose-purple prose-sm max-w-none">
 							{@html block.investigation}
 						</div>
 					</div>
@@ -114,7 +116,7 @@
 				{#if block.discovery}
 					<div>
 						<h4 class="font-semibold text-purple-900 mb-1">Discovery</h4>
-						<div class="text-sm text-purple-800 prose prose-purple prose-sm">
+						<div class="text-sm text-purple-800 prose prose-purple prose-sm max-w-none">
 							{@html block.discovery}
 						</div>
 					</div>
@@ -130,7 +132,7 @@
 				{#if block.situation}
 					<div>
 						<h4 class="font-semibold text-teal-900 mb-1">Situation</h4>
-						<div class="text-sm text-teal-800 prose prose-teal prose-sm">
+						<div class="text-sm text-teal-800 prose prose-teal prose-sm max-w-none">
 							{@html block.situation}
 						</div>
 					</div>
@@ -138,7 +140,7 @@
 				{#if block.diagnosis}
 					<div>
 						<h4 class="font-semibold text-teal-900 mb-1">Diagnosis</h4>
-						<div class="text-sm text-teal-800 prose prose-teal prose-sm">
+						<div class="text-sm text-teal-800 prose prose-teal prose-sm max-w-none">
 							{@html block.diagnosis}
 						</div>
 					</div>
@@ -146,7 +148,7 @@
 				{#if block.solution}
 					<div>
 						<h4 class="font-semibold text-teal-900 mb-1">Solution</h4>
-						<div class="text-sm text-teal-800 prose prose-teal prose-sm">
+						<div class="text-sm text-teal-800 prose prose-teal prose-sm max-w-none">
 							{@html block.solution}
 						</div>
 					</div>

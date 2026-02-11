@@ -9,9 +9,11 @@ prerequisites: [why-japan-challenging]
 
 ## Page 1: Unit Introduction
 
-Welcome to this unit. In this unit we will explore how Japanese people communicate, why misunderstandings happen even with the best intentions, and how to read what's really being said beneath the surface.
+Welcome to this unit. In this unit we will explore how Japanese people communicate, why misunderstandings happen even with the best intentions, and how to read what's *really* being said beneath the surface.
 
-:::video{url="https://youtube.com/embed/PLACEHOLDER" title="Cultural Sensitivity Introduction" duration=180}
+1. **First we'll watch a video** from Youtube. 
+
+:::video{url="https://youtu.be/IGJY8qK9mrY?si=xFlMEaBfXbcKmYKP" title="Cultural Sensitivity Introduction" duration=180}
 :::
 
 **What You'll Learn:**
@@ -24,7 +26,7 @@ Welcome to this unit. In this unit we will explore how Japanese people communica
 
 ## Page 2: When "Yes" Doesn't Mean "Yes"
 
-:::video{url="https://youtube.com/embed/PLACEHOLDER" title="Understanding Honne and Tatemae" duration=240}
+:::video{url="https://youtu.be/HswSe1ojkwI?si=JLy920kJx3jnr41E" title="Understanding Honne and Tatemae" duration=240}
 :::
 
 **The Inquiry:** Why would someone agree to come to your event and then not show up?
@@ -46,7 +48,7 @@ Consider these questions:
 :::
 
 :::reflection{id="r1"}
-Think about a time someone told you what you wanted to hear instead of the truth. How did it feel when you found out? Now flip it — can you think of a time YOU avoided saying 'no' to protect someone's feelings? What does this tell you about the gap between your culture and Japan's?
+Think about a time someone told you what you wanted to hear instead of the truth. How did it feel when you found out? Now flip it — can you think of a time *you* avoided saying 'no' to protect someone's feelings? What does this tell you about the gap between your culture and Japan's?
 :::
 
 ## Page 3: The Power of Silence

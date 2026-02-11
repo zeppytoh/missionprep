@@ -8,12 +8,22 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// State
-	const user = data.user as { arrivalDate?: Date | string | null };
-	const currentArrivalDate = user.arrivalDate
-		? new Date(user.arrivalDate).toISOString().split('T')[0]
-		: '';
-	let arrivalDate = $state(currentArrivalDate);
+	// Derived from props
+	const user = $derived(data.user as { arrivalDate?: Date | string | null });
+	const currentArrivalDate = $derived(
+		user.arrivalDate ? new Date(user.arrivalDate).toISOString().split('T')[0] : ''
+	);
+
+	// State - initialize once on mount
+	let arrivalDate = $state('');
+	let initialized = false;
+
+	$effect(() => {
+		if (!initialized) {
+			arrivalDate = currentArrivalDate;
+			initialized = true;
+		}
+	});
 	let saving = $state(false);
 	let saveSuccess = $state(false);
 	let saveError = $state('');
