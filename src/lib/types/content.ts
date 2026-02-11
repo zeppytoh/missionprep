@@ -24,7 +24,7 @@ export interface VideoBlock extends BaseBlock {
 // Info box - highlighted callout with variants
 export interface InfoBoxBlock extends BaseBlock {
 	type: 'info-box';
-	variant: 'welcome' | 'outcomes' | 'note' | 'warning';
+	heading?: string;
 	content: string;
 }
 
@@ -39,38 +39,35 @@ export interface KeyPointBlock extends BaseBlock {
 export interface ActivityBlock extends BaseBlock {
 	type: 'activity';
 	title: string;
-	sections: {
-		setup?: string;
-		investigation?: string;
-		discovery?: string;
-		application?: string;
-	};
+	setup?: string;
+	investigation?: string;
+	discovery?: string;
+	application?: string;
 }
 
 // Case study - scenario card
 export interface CaseStudyBlock extends BaseBlock {
 	type: 'case-study';
 	title: string;
-	scenario: string;
-	questions?: string[];
+	situation: string;
+	diagnosis: string;
+	solution: string;
 }
 
-// Quiz inline block - small quiz within content
-export interface QuizInlineBlock extends BaseBlock {
-	type: 'quiz-inline';
-	question: string;
-	options: string[];
-	correctIndex: number;
-	explanation?: string;
+// Quiz block - interactive assessment
+export interface QuizBlock extends BaseBlock {
+	type: 'quiz';
+	questions: QuizQuestion[];
+	passingScore: number;
+	isCompletionQuiz: boolean;
 }
 
 // Reflection block - personal notes
 export interface ReflectionBlock extends BaseBlock {
 	type: 'reflection';
 	id: string; // unique identifier for this reflection
-	prompt: string;
-	required: boolean;
-	minLength?: number;
+	question: string;
+	initialValue?: string;
 }
 
 // Embed block - external iframe
@@ -89,7 +86,7 @@ export type ContentBlock =
 	| KeyPointBlock
 	| ActivityBlock
 	| CaseStudyBlock
-	| QuizInlineBlock
+	| QuizBlock
 	| ReflectionBlock
 	| EmbedBlock;
 
@@ -107,13 +104,13 @@ export interface ModulePage {
 	blocks: ContentBlock[];
 }
 
-// Quiz configuration (separate from inline quiz blocks)
+// Quiz question
 export interface QuizQuestion {
 	id: string;
 	question: string;
-	options: string[];
-	correctIndex: number;
-	explanation?: string;
+	options: Array<{ id: string; text: string }>;
+	correct: string; // The ID of the correct option (e.g., "a", "b", "c", "d")
+	explanation: string;
 }
 
 export interface QuizConfig {

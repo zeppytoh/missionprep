@@ -15,6 +15,8 @@ export type WithElementRef<T extends Record<string, any>> = T & {
 
 export type WithoutChildrenOrChild<T extends Record<string, any>> = RestProps<T>;
 
+export type WithoutChildren<T extends Record<string, any>> = RestProps<T>;
+
 export type WithAsChild<T extends Record<string, any>> = T & {
 	asChild?: boolean;
 	el?: HTMLElement | null;
